@@ -1,0 +1,190 @@
+{
+    "swagger" : "2.0",
+    "info" : {
+      "version" : "2020-11-02T20:08:55Z",
+      "title" : "Full Stack Dev Test API"
+    },
+    "host" : "",
+    "basePath" : "/",
+    "schemes" : [ "http", "https" ],
+    "paths" : {        
+      "/stats/{period}" : {
+        "get" : {
+          "summary" : "Gets the season, week or month for all the players",
+          "produces" : [ "application/json" ],
+          "parameters" : [ {
+            "name" : "period",
+            "in" : "path",
+            "description" : "Time frame requested - [week, month, season]",
+            "required" : false,
+            "type" : "string"
+          }, {
+            "name" : "weekId",
+            "in" : "query",
+            "description" : "When period set to 'week' - specifies the ID of the week to return [1-37]",
+            "required" : false,
+            "type" : "string"
+          }, {
+            "name" : "monthId",
+            "in" : "query",
+            "description" : "When period set to 'month' - specifies the ID of the month to return [1-12]",
+            "required" : false,
+            "type" : "string"
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "200 response",
+              "schema" : {
+                "$ref" : "#/definitions/StatsResponse"
+              }
+            }
+          }
+        },
+        "options" : {
+          "consumes" : [ "application/json" ],
+          "produces" : [ "application/json" ],
+          "responses" : {
+            "200" : {
+              "description" : "200 response",
+              "headers" : {
+                "Access-Control-Allow-Origin" : {
+                  "type" : "string"
+                },
+                "Access-Control-Allow-Methods" : {
+                  "type" : "string"
+                },
+                "Access-Control-Allow-Headers" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions" : {    
+      "StatsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "period" : {
+            "type" : "string",
+            "description" : "Which period are the stats for",
+            "enum" : [ "week", "month", "season" ]
+          },
+          "stats" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "teamName" : {
+                  "type" : "string",
+                  "description" : "Name of the players current team"
+                },
+                "savesTier2" : {
+                  "type" : "integer",
+                  "description" : "Players save bonus tier 2 in the requested period"
+                },
+                "lastName" : {
+                  "type" : "string",
+                  "description" : "Player last name"
+                },
+                "savesTier1" : {
+                  "type" : "integer",
+                  "description" : "Players save bonus tier 1 in the requested period"
+                },
+                "subs" : {
+                  "type" : "integer",
+                  "description" : "Players substitute appearances in the requested period"
+                },
+                "motms" : {
+                  "type" : "integer",
+                  "description" : "Players man of the match awards in the requested period"
+                },
+                "points" : {
+                  "type" : "integer",
+                  "description" : "Players points scored in the requested period"
+                },
+                "redCards" : {
+                  "type" : "integer",
+                  "description" : "Players red cards received in the requested period"
+                },
+                "concedes" : {
+                  "type" : "integer",
+                  "description" : "Players goals conceded in the requested period"
+                },
+                "assists" : {
+                  "type" : "integer",
+                  "description" : "Players assists in the requested period"
+                },
+                "shotsTier1" : {
+                  "type" : "integer",
+                  "description" : "Players shots bonus tier 1 in the requested period"
+                },
+                "shotsTier2" : {
+                  "type" : "integer",
+                  "description" : "Players shots bonus tier 2 in the requested period"
+                },
+                "id" : {
+                  "type" : "integer",
+                  "description" : "Player identifier"
+                },
+                "starts" : {
+                  "type" : "integer",
+                  "description" : "Players match starts in the requested period"
+                },
+                "goals" : {
+                  "type" : "integer",
+                  "description" : "Players goals scored in the requested period"
+                },
+                "tacklesTier1" : {
+                  "type" : "integer",
+                  "description" : "Players tackles bonus tier 1 in the requested period"
+                },
+                "tacklesTier2" : {
+                  "type" : "integer",
+                  "description" : "Players tackles bonus tier 2 in the requested period"
+                },
+                "ownGoals" : {
+                  "type" : "integer",
+                  "description" : "Players own goals scored in the requested period"
+                },
+                "cleansheets" : {
+                  "type" : "integer",
+                  "description" : "Players cleansheets in the requested period"
+                },
+                "penSaves" : {
+                  "type" : "integer",
+                  "description" : "Players penalty saves in the requested period"
+                },
+                "firstName" : {
+                  "type" : "string",
+                  "description" : "Player first name - empty string for someone like Willian"
+                },
+                "penMisses" : {
+                  "type" : "integer",
+                  "description" : "Players penalties missed in the requested period"
+                },
+                "passesTier1" : {
+                  "type" : "integer",
+                  "description" : "Players passes bonus tier 1 in the requested period"
+                },
+                "position" : {
+                  "type" : "string",
+                  "description" : "Player position",
+                  "enum" : [ "GK", "DEF", "MID", "FOR" ]
+                },
+                "passesTier2" : {
+                  "type" : "integer",
+                  "description" : "Players passes bonus tier 2 in the requested period"
+                },
+                "yellowCards" : {
+                  "type" : "integer",
+                  "description" : "Players yellow cards received in the requested period"
+                }
+              }
+            }
+          }
+        }
+      }    
+    }
+  }

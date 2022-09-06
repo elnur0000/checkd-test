@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  server:
+    build:
+      context: ../
+      dockerfile: ./infra/Dockerfile
+      target: dev
+    user: 'node'
+    container_name: server
+    ports:
+      - '5000:5000'
+    volumes:
+      - ../:/home/node/app
+      - /home/node/app/node_modules
+    networks: 
+      - backend
+    links:
+      - mysql
+    depends_on:
+      mysql:
+        condition: service_started
+    command: sh -c 'echo "==> Waiting for the DB to be ready" && ./infra/wait-for mysql:3306 -t 60 -- && npm run start:dev'
+
+  mysql:
+    image: mysql:8.0.12
+    container_name: mysql
+    cap_add:
+      - SYS_NICE
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: test
+    volumes:
+      - ./seeders/Dump20201103.sql:/docker-entrypoint-initdb.d/Dump20201103.sql
+    ports:
+      - '3306:3306'
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local

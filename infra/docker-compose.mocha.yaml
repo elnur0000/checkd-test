@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  server-test:
+    build:
+      context: ../
+      dockerfile: ./infra/Dockerfile
+      target: dev
+    user: 'node'
+    container_name: server-test
+    ports:
+      - '5001:5001'
+    volumes:
+      - ../:/home/node/app
+      - /home/node/app/node_modules
+    networks: 
+      - backend
+    links:
+      - mysql-test
+    depends_on:
+      mysql-test:
+        condition: service_started
+    environment:
+      PORT: 5001
+      NODE_ENV: production
+      MYSQL_HOST: mysql-test
+      MYSQL_PORT: 3307
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: practical
+    command: sh -c 'echo "==> Waiting for the DB to be ready" && ./infra/wait-for mysql-test:3306 -t 60 -- && $RUN_SCRIPT'
+
+  mysql-test:
+    image: mysql:8.0.12
+    tmpfs:
+      - /mysql/data
+    container_name: mysql-test
+    cap_add:
+      - SYS_NICE
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: practical
+    volumes:
+      - ./seeders/Structure.sql:/docker-entrypoint-initdb.d/Structure.sql
+    ports:
+      - '3307:3306'
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
